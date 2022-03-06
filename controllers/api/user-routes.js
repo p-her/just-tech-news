@@ -4,9 +4,6 @@ const { User, Post, Comment, Vote } = require('../../models');
 // get all users
 router.get('/', (req, res) => {
   User.findAll({
-              // PROTECT THE PASSWORD
-        // we've provided an attributes key and instructed the query to exclude the password column.
-        // it's in an array because if we want to exclude more than one, we can just add more.
     attributes: { exclude: ['password'] }
   })
     .then(dbUserData => res.json(dbUserData))
@@ -64,7 +61,13 @@ router.post('/', (req, res) => {
     password: req.body.password
   })
     .then(dbUserData => {
-      res.json(dbUserData);
+      req.session.save(() => {
+        req.session.user_id = dbUserData.id;
+        req.session.username = dbUserData.username;
+        req.session.loggedIn = true;
+  
+        res.json(dbUserData);
+      });
     })
     .catch(err => {
       console.log(err);
@@ -91,8 +94,25 @@ router.post('/login', (req, res) => {
       return;
     }
 
-    res.json({ user: dbUserData, message: 'You are now logged in!' });
+    req.session.save(() => {
+      req.session.user_id = dbUserData.id;
+      req.session.username = dbUserData.username;
+      req.session.loggedIn = true;
+  
+      res.json({ user: dbUserData, message: 'You are now logged in!' });
+    });
   });
+});
+
+router.post('/logout', (req, res) => {
+  if (req.session.loggedIn) {
+    req.session.destroy(() => {
+      res.status(204).end();
+    });
+  }
+  else {
+    res.status(404).end();
+  }
 });
 
 router.put('/:id', (req, res) => {
