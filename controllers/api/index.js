@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const userRoutes = require('./user-routes');
 const postRoutes = require('./post-routes');
+const commentRoutes = require('./comment-route');
+
 
 
 
@@ -9,6 +11,7 @@ const postRoutes = require('./post-routes');
 // another router instance, prefixing them with the path /users at that time
 router.use('/users', userRoutes);
 router.use('/posts', postRoutes);
+router.use('/comment', commentRoutes);
 
 
 module.exports = router;

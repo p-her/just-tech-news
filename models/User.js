@@ -76,18 +76,14 @@ User.init(
         },
         // TABLE CONFIGURATION OPTIONS GO HERE (https://sequelize.org/v5/manual/models-definition.html#configuration))
         sequelize,
-
         // pass in our imported sequelize connection (the direct connection to our database)
         timestamps: false,
-
-    // don't pluralize name of database table
-    freezeTableName: true,
-
-    // use underscores instad of camel-casing (i.e `comment_text`)
-    underscored: true,
-
-    // make it so our model name stays lowercase in the database
-    modelName: 'user'
+        // don't pluralize name of database table
+        freezeTableName: true,
+        // use underscores instad of camel-casing (i.e `comment_text`)
+        underscored: true,
+        // make it so our model name stays lowercase in the database
+        modelName: 'user'
 
     }
 );
